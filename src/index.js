@@ -18,7 +18,7 @@ function gulpPlugin(options) {
 			console.log('skipping', file.path);
 			return done();
 		}
-		processor.transform(file.path)
+		processor.transform(file.path, options)
 		.then((data) => {
 			file.contents = new Buffer(data.result);
 			if (options.warning_as_error && data.metadata.message !== '') {

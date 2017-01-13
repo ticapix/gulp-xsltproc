@@ -17,7 +17,7 @@ describe('gulp-xsltproc', function() {
 			let input = [];
 			let output = [];
 			return new Promise((resolve, reject) => {
-				gulp.src(path.join(fixtures_path, '**', '*.xml'))
+				gulp.src(path.join(fixtures_path, '**', '{menu,page}.xml'))
 				.pipe(map((file, done) => {
 					input.push(path.relative(fixtures_path, file.path));
 					done(null, file);
@@ -38,7 +38,7 @@ describe('gulp-xsltproc', function() {
 		});
 		it('check files are processed (warning as error)', () => {
 			return new Promise((resolve, reject) => {
-				gulp.src(path.join(fixtures_path, '**', '*.xml'))
+				gulp.src(path.join(fixtures_path, '**', 'menu.xml'))
 				.pipe(xsltproc().on('error', (error) => {
 					assert.notEqual(error.message.indexOf('warning: failed to load external entity'), -1);
 					assert.notEqual(error.message.indexOf('fakefile.dtd'), -1);
@@ -61,6 +61,15 @@ describe('gulp-xsltproc', function() {
 				});
 			});
 		});
-
+		it('check stringparams', () => {
+			return new Promise((resolve, reject) => {
+				gulp.src(path.join(fixtures_path, 'params.xml'))
+				.pipe(xsltproc({metadata: false, stringparams: {n: '42'}}))
+				.pipe(map((file, done) => {
+					assert.equal(file.contents, 'n=42');
+					resolve();
+				}));
+			});
+		});
 	});
 });

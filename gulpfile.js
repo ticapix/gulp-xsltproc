@@ -17,7 +17,7 @@ const files = {
 }
 
 gulp.task('lint', () => {
-	return gulp.src([path.join('**',' *.js'), '!node_modules/**'])
+	return gulp.src([path.join('src', '**','*.js'), '!node_modules/*'])
     .pipe(jshint({esversion: 6, node: true}))
     .pipe(jshint.reporter('default'));
 });

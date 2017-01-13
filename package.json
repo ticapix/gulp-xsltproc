@@ -1,6 +1,6 @@
 {
   "name": "gulp-xsltproc",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "gulp plugin for node-xsltproc (wrapper around xsltproc with profiling information)",
   "main": "index.js",
   "scripts": {
@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/ticapix/gulp-xsltproc#readme",
   "dependencies": {
-    "node-xsltproc": "^1.0.0"
+    "node-xsltproc": "^1.1.0"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
