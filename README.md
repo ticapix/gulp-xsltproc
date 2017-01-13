@@ -1,5 +1,7 @@
 
-# gulp-xsltproc [![Build Status](https://travis-ci.org/ticapix/gulp-xsltproc.svg?branch=master)](https://travis-ci.org/ticapix/gulp-xsltproc)
+# gulp-xsltproc
+
+[![Build Status](https://travis-ci.org/ticapix/gulp-xsltproc.svg?branch=master)](https://travis-ci.org/ticapix/gulp-xsltproc)
 
 ## Getting started
 
