@@ -9,9 +9,9 @@ There is an external dependency on xsltproc required by `node-xsltproc`. Check i
 
 ### Options
 
-- `warning_as_error` : treat xsltproc error as warning (default: true)
+- `warning_as_error` : treat xsltproc warning as error (default: true)
 - `metadata` : emit a new [vinyl](https://github.com/gulpjs/vinyl) file with a `.json` extension containing the metadata from `node-xsltproc` (default: true)
-- additional options are passed at it is to `node-xsltproc`
+- additional options are passed as it is to `node-xsltproc`
 
 
 ### Exemples
