@@ -31,13 +31,13 @@ function gulpPlugin(options) {
 				return done();
 			}
 			data.file = path.relative(file.base, file.path);
-			let metadata = new File({
-				base: file.base,
-				path: `${file.path}.json`,
-				contents: new Buffer(JSON.stringify(data.metadata))
-			});
 			this.push(file); // don't move this line higher in the code as value of file changes after that line
 			if (options.metadata) {
+                let metadata = new File({
+                    base: file.base,
+                    path: `${file.path}.json`,
+                    contents: new Buffer(JSON.stringify(data.metadata))
+                });
 				this.push(metadata);
 			}
 			return done();
