@@ -1,6 +1,5 @@
 const through = require('through2');
 const gutil = require('gulp-util');
-const assert = require('assert');
 const File = require('vinyl');
 const path = require('path');
 const xsltproc = require('node-xsltproc');
@@ -12,13 +11,16 @@ function gulpPlugin(options) {
 	options = options || {};
 	options.metadata = options.metadata === undefined ? true : options.metadata;
 	options.warning_as_error = options.warning_as_error === undefined ? true : options.warning_as_error;
+    const filepaths = options.stylesheet === undefined ? [] : [options.stylesheet];
 	let processor = xsltproc(options);
-	function XsltProcPlugin(file, encoding, done) {
-		if (file.contents.indexOf('xml-stylesheet') === -1) {
+    function XsltProcPlugin(file, encoding, done) {
+		if (file.contents.indexOf('xml-stylesheet') === -1
+		    && !options.stylesheet) {
 			console.log('skipping', file.path);
 			return done();
 		}
-		processor.transform(file.path, options)
+		const processorFilepaths = filepaths.concat(file.path);
+		processor.transform(processorFilepaths, options)
 		.then((data) => {
 			file.contents = new Buffer(data.result);
 			if (options.warning_as_error && data.metadata.message !== '') {

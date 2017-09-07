@@ -71,5 +71,16 @@ describe('gulp-xsltproc', function() {
 				}));
 			});
 		});
+        it( 'handles custom xslt stylesheets', () => {
+            return new Promise( (resolve, reject) => {
+                const stylesheet = path.join( fixtures_path, 'no-stylesheet.xsl' );
+                gulp.src( path.join( fixtures_path, 'no-stylesheet.xml' ) )
+                    .pipe( xsltproc( { metadata: false, stylesheet: stylesheet } ) )
+                    .pipe( map( (file, done) => {
+                        assert.equal( file.contents, 'CUSTOM_STYLESHEET' );
+                        resolve();
+                    } ) );
+            } );
+        } );
 	});
 });
