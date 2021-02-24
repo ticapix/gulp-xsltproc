@@ -14,28 +14,28 @@ const testdir = path.resolve(__dirname, argv.testdir || 'test');
 const files = {
 	source : path.join(sourcedir, '**', '*.js'),
 	other : ['LICENSE', 'README*', 'package.json']
-}
+};
 
 gulp.task('lint', () => {
-	return gulp.src([path.join('src', '**','*.js'), '!node_modules/*'])
+	return gulp.src([path.join('**','*.js'), '!node_modules/**'])
     .pipe(jshint({esversion: 6, node: true}))
     .pipe(jshint.reporter('default'));
 });
 
-gulp.task('test', ['lint'], () => {
+gulp.task('test', gulp.series('lint', () => {
 	return gulp.src(path.join(testdir, 'test*.js'))
     .pipe(mocha({reporter: 'spec'}));
-});
+}));
 
 gulp.task('clean', () => {
-    return gulp.src(distdir, {read: false})
+    return gulp.src(distdir, {read: false, allowEmpty: true})
     .pipe(clean());
 });
 
-gulp.task('dist',['clean', 'test'], () => {
+gulp.task('dist', gulp.series('clean', 'test', () => {
 	return gulp.src(files.source, {base: path.resolve(__dirname, sourcedir)})
 	.pipe(addsrc(files.other))
-    .pipe(gulp.dest(distdir))
-});
+    .pipe(gulp.dest(distdir));
+}));
 
-gulp.task('default', ['lint', 'test']);
+gulp.task('default', gulp.series('lint', 'test'));
