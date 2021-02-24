@@ -42,7 +42,7 @@ function gulpPlugin(options) {
 			return done();
 		})
 		.catch((error) => {
-			console.error(error)
+			console.error(error);
 			this.emit('error', new PluginError({
 				plugin: 'XsltProc',
 				message: `error transforming ${file.path}\n${error.message}`
