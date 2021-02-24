@@ -1,6 +1,6 @@
 const through = require('through2');
-const gutil = require('gulp-util');
-const File = require('vinyl');
+const PluginError = require('plugin-error');
+const Vinyl = require('vinyl');
 const path = require('path');
 const xsltproc = require('node-xsltproc');
 
@@ -14,17 +14,16 @@ function gulpPlugin(options) {
     const filepaths = options.stylesheet === undefined ? [] : [options.stylesheet];
 	let processor = xsltproc(options);
     function XsltProcPlugin(file, encoding, done) {
-		if (file.contents.indexOf('xml-stylesheet') === -1
-		    && !options.stylesheet) {
+		if (file.contents.indexOf('xml-stylesheet') === -1 && !options.stylesheet) {
 			console.log('skipping', file.path);
 			return done();
 		}
 		const processorFilepaths = filepaths.concat(file.path);
 		processor.transform(processorFilepaths, options)
 		.then((data) => {
-			file.contents = new Buffer(data.result);
-			if (options.warning_as_error && data.metadata.message !== '') {
-				this.emit('error', new gutil.PluginError({
+			file.contents = Buffer.from(data.result);
+			if (options.warning_as_error && data.metadata !== undefined && data.metadata.message !== '') {
+				this.emit('error', new PluginError({
 					plugin: 'XsltProc',
 					message: `warning transforming ${file.path}\n${data.metadata.message}`
 				}));
@@ -33,17 +32,18 @@ function gulpPlugin(options) {
 			data.file = path.relative(file.base, file.path);
 			this.push(file); // don't move this line higher in the code as value of file changes after that line
 			if (options.metadata) {
-                let metadata = new File({
+                let metadata = new Vinyl({
                     base: file.base,
                     path: `${file.path}.json`,
-                    contents: new Buffer(JSON.stringify(data.metadata))
+                    contents: Buffer.from(JSON.stringify(data.metadata))
                 });
 				this.push(metadata);
 			}
 			return done();
 		})
 		.catch((error) => {
-			this.emit('error', new gutil.PluginError({
+			console.error(error)
+			this.emit('error', new PluginError({
 				plugin: 'XsltProc',
 				message: `error transforming ${file.path}\n${error.message}`
 			}));
