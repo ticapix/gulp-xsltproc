@@ -21,8 +21,7 @@
   },
   "homepage": "https://github.com/ticapix/gulp-xsltproc#readme",
   "dependencies": {
-    "node-xsltproc": "^1.2.0",
-    "plugin-error": "^1.0.1"
+    "node-xsltproc": "^1.2.1"
   },
   "devDependencies": {
     "gulp": "^4.0.2",
@@ -31,6 +30,7 @@
     "gulp-jshint": "^2.1.0",
     "gulp-mocha": "^8.0.0",
     "jshint": "^2.12.0",
-    "minimist": "^1.2.5"
+    "minimist": "^1.2.5",
+    "plugin-error": "^1.0.1"
   }
 }
