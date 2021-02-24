@@ -28,10 +28,10 @@ describe('gulp-xsltproc', function() {
 					done(null, file);
 				}))
 				.on('end', () => {
-					assert.equal(2, input.filter(elt => elt.endsWith('.xml')).length);
-					assert.equal(2, output.filter(elt => elt.endsWith('.xml')).length);
-					assert.equal(2, output.filter(elt => elt.endsWith('.xml.json')).length);
-					assert.equal(4, output.length);
+					assert.strictEqual(2, input.filter(elt => elt.endsWith('.xml')).length);
+					assert.strictEqual(2, output.filter(elt => elt.endsWith('.xml')).length);
+					assert.strictEqual(2, output.filter(elt => elt.endsWith('.xml.json')).length);
+					assert.strictEqual(4, output.length);
 					resolve();
 				});
 			});
@@ -40,8 +40,8 @@ describe('gulp-xsltproc', function() {
 			return new Promise((resolve, reject) => {
 				gulp.src(path.join(fixtures_path, '**', 'menu.xml'))
 				.pipe(xsltproc().on('error', (error) => {
-					assert.notEqual(error.message.indexOf('warning: failed to load external entity'), -1);
-					assert.notEqual(error.message.indexOf('fakefile.dtd'), -1);
+					assert.notStrictEqual(error.message.indexOf('warning: failed to load external entity'), -1);
+					assert.notStrictEqual(error.message.indexOf('fakefile.dtd'), -1);
 					resolve();
 				}));
 			});
@@ -56,7 +56,7 @@ describe('gulp-xsltproc', function() {
 					done(null, file);
 				}))
 				.on('end', () => {
-					assert.deepEqual(output, ['page.xml']);
+					assert.deepStrictEqual(output, ['page.xml']);
 					resolve();
 				});
 			});
@@ -66,21 +66,21 @@ describe('gulp-xsltproc', function() {
 				gulp.src(path.join(fixtures_path, 'params.xml'))
 				.pipe(xsltproc({metadata: false, stringparams: {n: '42'}}))
 				.pipe(map((file, done) => {
-					assert.equal(file.contents, 'n=42');
+					assert.strictEqual(file.contents.toString(), 'n=42');
 					resolve();
 				}));
 			});
 		});
-        it( 'handles custom xslt stylesheets', () => {
-            return new Promise( (resolve, reject) => {
-                const stylesheet = path.join( fixtures_path, 'no-stylesheet.xsl' );
-                gulp.src( path.join( fixtures_path, 'no-stylesheet.xml' ) )
-                    .pipe( xsltproc( { metadata: false, stylesheet: stylesheet } ) )
-                    .pipe( map( (file, done) => {
-                        assert.equal( file.contents, 'CUSTOM_STYLESHEET' );
+        it('handles custom xslt stylesheets', () => {
+            return new Promise((resolve, reject) => {
+                const stylesheet = path.join( fixtures_path, 'no-stylesheet.xsl');
+                gulp.src(path.join(fixtures_path, 'no-stylesheet.xml'))
+                    .pipe(xsltproc({ metadata: false, stylesheet: stylesheet }))
+                    .pipe(map((file, done) => {
+                        assert.strictEqual(file.contents.toString(), 'CUSTOM_STYLESHEET');
                         resolve();
-                    } ) );
-            } );
-        } );
+                    }));
+            });
+        });
 	});
 });
